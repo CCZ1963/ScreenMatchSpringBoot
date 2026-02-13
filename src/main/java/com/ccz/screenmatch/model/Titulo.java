@@ -7,7 +7,10 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@MappedSuperclass
+@Entity // CAMBIO: Ahora sí es una entidad
+// @Table(name = "titulos")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "categoria_titulo", discriminatorType = DiscriminatorType.STRING)
 public abstract class Titulo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,5 +67,9 @@ public abstract class Titulo {
     @SerializedName("imdbID")
     @Column(name = "imdb_id")
     private String imdbId;
+
+    @SerializedName("Ratings")
+    @OneToMany(mappedBy = "titulo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Rating> ratings;
 }
 
